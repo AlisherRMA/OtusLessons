@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(
                         this,
                         "checkbox: ${it.isCheckBoxSelected}, comment: ${it.comment}",
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                     ).show()
                 }
             }
