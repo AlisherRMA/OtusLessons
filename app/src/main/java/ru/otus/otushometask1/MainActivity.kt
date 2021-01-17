@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             Intent(Intent.ACTION_SEND).apply {
                 putExtra(
                     Intent.EXTRA_TEXT,
-                    "I have created a new android application. Please join me, I have cookies :)"
+                    resources.getString(R.string.invite_message)
                 );
                 type = "text/plain"
                 startActivity(this)
