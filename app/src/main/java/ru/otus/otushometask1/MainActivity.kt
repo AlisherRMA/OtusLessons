@@ -3,6 +3,7 @@ package ru.otus.otushometask1
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -72,8 +73,8 @@ class MainActivity : AppCompatActivity() {
                 val detailsData =
                     data?.getParcelableExtra<DetailsData>(FilmDetailsActivity.EXTRA_SEND_BACK_DATA)
                 detailsData?.let {
-                    println("checkbox: ${it.isCheckBoxSelected}")
-                    println("comment: ${it.comment}")
+                    Log.d("checkbox", "${it.isCheckBoxSelected}")
+                    Log.d("comment", it.comment)
                 }
             }
         } else {
