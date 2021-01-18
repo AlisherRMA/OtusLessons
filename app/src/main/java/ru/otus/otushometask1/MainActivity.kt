@@ -72,11 +72,8 @@ class MainActivity : AppCompatActivity() {
                 val detailsData =
                     data?.getParcelableExtra<DetailsData>(FilmDetailsActivity.EXTRA_SEND_BACK_DATA)
                 detailsData?.let {
-                    Toast.makeText(
-                        this,
-                        "checkbox: ${it.isCheckBoxSelected}, comment: ${it.comment}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    println("checkbox: ${it.isCheckBoxSelected}")
+                    println("comment: ${it.comment}")
                 }
             }
         } else {
