@@ -3,6 +3,7 @@ package ru.otus.otushometask1
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             Intent(Intent.ACTION_SEND).apply {
                 putExtra(
                     Intent.EXTRA_TEXT,
-                    "I have created a new android application. Please join me, I have cookies :)"
+                    resources.getString(R.string.invite_message)
                 );
                 type = "text/plain"
                 startActivity(this)
@@ -72,11 +73,8 @@ class MainActivity : AppCompatActivity() {
                 val detailsData =
                     data?.getParcelableExtra<DetailsData>(FilmDetailsActivity.EXTRA_SEND_BACK_DATA)
                 detailsData?.let {
-                    Toast.makeText(
-                        this,
-                        "checkbox: ${it.isCheckBoxSelected}, comment: ${it.comment}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Log.d("checkbox", "${it.isCheckBoxSelected}")
+                    Log.d("comment", it.comment)
                 }
             }
         } else {
