@@ -20,7 +20,7 @@
         tools:text="Начало" />
 
     <com.like.LikeButton
-        android:id="@+id/star_button"
+        android:id="@+id/makeFavorite"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintBottom_toTopOf="@id/image"

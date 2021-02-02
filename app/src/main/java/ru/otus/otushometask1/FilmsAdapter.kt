@@ -1,10 +1,12 @@
 package ru.otus.otushometask1
 
-import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.like.LikeButton
+import com.like.OnLikeListener
+
 
 class FilmsAdapter(
     private val items: List<FilmData>,
@@ -25,14 +27,20 @@ class FilmsAdapter(
             val item = items[position]
             holder.bind(item)
 
+            holder.makeFavorite.setOnLikeListener(object : OnLikeListener {
+                override fun liked(likeButton: LikeButton) {
+                    Log.d("ADAPTER", item.name)
+                    clickListener.onFavoriteClick(item)
+                }
+                override fun unLiked(likeButton: LikeButton) {}
+            })
+
             holder.button.setOnClickListener {
 //                holder.title.setTextColor(Color.GREEN)
                 clickListener.onDetailsClick(item, position)
             }
 
-            holder.image.setOnClickListener {
-                clickListener.onFavoriteClick(item)
-            }
+
         }
     }
 
