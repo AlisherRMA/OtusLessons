@@ -1,6 +1,7 @@
 package ru.otus.otushometask1
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import ru.otus.otushometask1.dialogs.CustomDialog
 import ru.otus.otushometask1.favorites.FavoritesActivity
 
 class MainActivity : AppCompatActivity() {
@@ -45,29 +47,6 @@ class MainActivity : AppCompatActivity() {
         getFavoriteItems()
     }
 
-    private fun initBottomNavigation() {
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.nav_view)
-
-        bottomNavigationView.selectedItemId = R.id.navigation_home
-        bottomNavigationView.setOnNavigationItemSelectedListener {
-            Log.d("ACT_ID", it.itemId.toString());
-            when (it.itemId) {
-                R.id.navigation_favorites -> {
-                    Intent(this, FavoritesActivity::class.java).apply {
-                        putParcelableArrayListExtra(
-                            FavoritesActivity.EXTRA_FAVORITE,
-                            ArrayList(favoriteItems)
-                        )
-                        startActivity(this)
-                    }
-                    true
-                }
-                R.id.navigation_home -> true
-            }
-            true
-        }
-    }
-
     private fun initClickListeners() {
         findViewById<Button>(R.id.button_invite).setOnClickListener {
             Intent(Intent.ACTION_SEND).apply {
@@ -82,8 +61,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerView.layoutManager = layoutManager
+//        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+//        recyclerView.layoutManager = layoutManager
 
         recyclerView.adapter = FilmsAdapter(items, object : FilmsAdapter.NewsClickListener {
             override fun onDetailsClick(filmItem: FilmData, position: Int) {
@@ -97,7 +76,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFavoriteClick(filmItem: FilmData) {
-                Log.d("FAV_FILM", filmItem.name)
                 filmItem.isFavorite = true
                 favoriteItems.add(filmItem)
             }
@@ -130,6 +108,28 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun initBottomNavigation() {
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.nav_view)
+
+        bottomNavigationView.selectedItemId = R.id.navigation_home
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.navigation_favorites -> {
+                    Intent(this, FavoritesActivity::class.java).apply {
+                        putParcelableArrayListExtra(
+                            FavoritesActivity.EXTRA_FAVORITE,
+                            ArrayList(favoriteItems)
+                        )
+                        startActivity(this)
+                    }
+                    true
+                }
+                R.id.navigation_home -> true
+            }
+            true
+        }
+    }
+
     private  fun getFavoriteItems(){
         intent.getParcelableArrayListExtra<FilmData>(EXTRA_FAVORITES_BACK)?.let { it ->
             it.forEachIndexed { _, element ->
@@ -143,6 +143,16 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    override fun onBackPressed() {
+        val dialog: Dialog = CustomDialog(this)
+        dialog.setCancelable(false)
+        dialog.setOnDismissListener {
+            super.onBackPressed()
+        }
+
+        dialog.show()
     }
 
 }
