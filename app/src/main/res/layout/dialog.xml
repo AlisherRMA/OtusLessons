@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:background="@color/white"
+            android:textColor="@color/black"
             android:text="Да" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="@color/white"
+            android:textColor="@color/black"
             android:layout_marginStart="40dp"
             android:text="Нет" />
     </LinearLayout>

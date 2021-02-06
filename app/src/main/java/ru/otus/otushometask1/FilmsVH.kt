@@ -24,6 +24,6 @@ class FilmsVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         makeFavorite.isLiked = item.isFavorite
 
         title.text = item.name
-        image.setBackgroundResource(item.image)
+        image.setImageResource(item.image)
     }
 }
