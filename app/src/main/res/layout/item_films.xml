@@ -28,7 +28,7 @@
             android:id="@+id/makeFavorite"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            app:icon_size="10sp"
+            app:icon_size="24dp"
             app:icon_type="heart"
             android:layout_margin="5dp"
             app:layout_constraintEnd_toEndOf="parent"

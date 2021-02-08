@@ -1,9 +1,12 @@
 package ru.otus.otushometask1.favorites
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,13 +24,24 @@ class FavoritesActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("onCreate", "OnFavoritesActivityCreated")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorites)
 
 
         intent.getParcelableArrayListExtra<FilmData>(EXTRA_FAVORITE)?.let {
             it.forEachIndexed { index, element ->
-                favoriteItems.add(index, FilmData(element.id, element.name, element.description, element.image, element.isVisited, element.isFavorite))
+                favoriteItems.add(
+                    index,
+                    FilmData(
+                        element.id,
+                        element.name,
+                        element.description,
+                        element.image,
+                        element.isVisited,
+                        element.isFavorite
+                    )
+                )
             }
 
         }
@@ -44,13 +58,15 @@ class FavoritesActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_home -> {
-                    Intent(this, MainActivity::class.java).apply {
-                        putParcelableArrayListExtra(
-                            MainActivity.EXTRA_FAVORITES_BACK,
-                            ArrayList(favoriteItems)
-                        )
-                        startActivity(this)
-                    }
+//                    Intent(this, MainActivity::class.java).apply {
+//                        putParcelableArrayListExtra(
+//                            MainActivity.EXTRA_FAVORITES_BACK,
+//                            ArrayList(favoriteItems)
+//                        )
+//                        startActivity(this)
+//                        finish()
+//                    }
+                    sendDataBackToPreviousActivity()
                     true
                 }
                 R.id.navigation_favorites -> true
@@ -74,5 +90,21 @@ class FavoritesActivity : AppCompatActivity() {
 
             })
 
+    }
+
+    override fun onBackPressed() {
+        sendDataBackToPreviousActivity()
+        super.onBackPressed()
+    }
+
+    private fun sendDataBackToPreviousActivity() {
+        setResult(Activity.RESULT_OK, Intent(this, MainActivity::class.java).apply {
+            putParcelableArrayListExtra(
+                MainActivity.EXTRA_FAVORITES_BACK,
+                ArrayList(favoriteItems)
+            )
+        })
+
+        finish()
     }
 }

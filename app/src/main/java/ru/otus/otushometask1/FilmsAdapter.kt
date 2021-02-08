@@ -32,7 +32,9 @@ class FilmsAdapter(
                     Log.d("ADAPTER", item.name)
                     clickListener.onFavoriteClick(item)
                 }
-                override fun unLiked(likeButton: LikeButton) {}
+                override fun unLiked(likeButton: LikeButton) {
+                    clickListener.onDeleteClick(item)
+                }
             })
 
             holder.button.setOnClickListener {
