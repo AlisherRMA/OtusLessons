@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OTUS_HOMETASK_1</string>
+    <string name="invite_friend">Пригласить друга</string>
+    <string name="title_home">Домой</string>
+    <string name="favorites">Избранное</string>
+    <string name="content_description">film poster</string>
+    <string name="button_details">Детали</string>
+    <string name="checkbox_like">Like</string>
+    <string name="invite_message">"I've made a new application. "</string>
+    <string name="leave_a_comment">Оставить комментарий</string>
+</resources>
