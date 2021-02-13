@@ -9,6 +9,7 @@ import ru.otus.otushometask1.FilmData
 import ru.otus.otushometask1.R
 
 class FavoritesAdapter(
+    private val layoutInflater: LayoutInflater,
     private val items: List<FilmData>,
     private val clickListener: FavoritesClickListener
 ) : RecyclerView.Adapter<FavoritesVH>() {

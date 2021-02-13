@@ -26,7 +26,7 @@ class FavoritesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("onCreate", "OnFavoritesActivityCreated")
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_favorites)
+        setContentView(R.layout.fragment_favorites)
 
 
         intent.getParcelableArrayListExtra<FilmData>(EXTRA_FAVORITE)?.let {
@@ -76,19 +76,19 @@ class FavoritesActivity : AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerView.layoutManager = layoutManager
-
-        recyclerView.adapter =
-            FavoritesAdapter(favoriteItems, object : FavoritesAdapter.FavoritesClickListener {
-
-                override fun onDeleteClick(filmItem: FilmData, position: Int) {
-                    favoriteItems.removeAt(position)
-                    recyclerView.adapter?.notifyItemRemoved(position)
-                    recyclerView.adapter?.notifyItemRangeChanged(position, favoriteItems.size)
-                }
-
-            })
+//        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+//        recyclerView.layoutManager = layoutManager
+//
+//        recyclerView.adapter =
+//            FavoritesAdapter(favoriteItems, object : FavoritesAdapter.FavoritesClickListener {
+//
+//                override fun onDeleteClick(filmItem: FilmData, position: Int) {
+//                    favoriteItems.removeAt(position)
+//                    recyclerView.adapter?.notifyItemRemoved(position)
+//                    recyclerView.adapter?.notifyItemRangeChanged(position, favoriteItems.size)
+//                }
+//
+//            })
 
     }
 
