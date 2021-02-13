@@ -1,21 +1,14 @@
 package ru.otus.otushometask1.films_list
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_films_list.*
 import ru.otus.otushometask1.FilmData
-import ru.otus.otushometask1.FilmDetailsActivity
-import ru.otus.otushometask1.MainActivity
 import ru.otus.otushometask1.R
-import ru.otus.otushometask1.favorites.FavoritesFragment
 import java.lang.Exception
 
 class FilmsFragment : Fragment() {
@@ -134,7 +127,7 @@ class FilmsFragment : Fragment() {
             object :
                 FilmsAdapter.NewsClickListener {
                 override fun onDetailsClick(filmItem: FilmData, position: Int) {
-                    items[position].isVisited = true;
+                    items[position].isVisited = true
                     recyclerView.adapter?.notifyItemChanged(position)
                     listener?.onDetailsClick(filmItem, position)
                 }
@@ -142,13 +135,13 @@ class FilmsFragment : Fragment() {
                 override fun onFavoriteClick(filmItem: FilmData) {
                     filmItem.isFavorite = true
                     recyclerView.adapter?.notifyDataSetChanged()
-                    listener?.onFavoriteClick(filmItem);
+                    listener?.onFavoriteClick(filmItem)
                 }
 
                 override fun onDeleteClick(filmItem: FilmData) {
                     filmItem.isFavorite = false
                     recyclerView.adapter?.notifyDataSetChanged()
-                    listener?.onDeleteClick(filmItem);
+                    listener?.onDeleteClick(filmItem)
                 }
             })
     }

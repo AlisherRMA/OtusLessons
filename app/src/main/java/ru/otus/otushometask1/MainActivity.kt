@@ -1,6 +1,5 @@
 package ru.otus.otushometask1
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -8,10 +7,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.otus.otushometask1.dialogs.CustomDialog
-import ru.otus.otushometask1.favorites.FavoritesActivity
 import ru.otus.otushometask1.favorites.FavoritesFragment
 import ru.otus.otushometask1.favorites.FavoritesFragment.*
 import ru.otus.otushometask1.film_details.FilmDetailsFragment
@@ -23,7 +20,6 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     private var favoriteItems = mutableListOf<FilmData>()
 
     companion object {
-        const val EXTRA_ITEMS = "EXTRA_ITEMS"
         const val EXTRA_FAVORITES_BACK = "EXTRA_FAVORITES_BACK"
     }
 
@@ -33,11 +29,8 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         setContentView(R.layout.activity_main)
 
         openFilmsList()
-//        initRecycler()
-//        initClickListeners()
+        initClickListeners()
         initBottomNavigation()
-
-
     }
 
     private fun openFilmsList() {
@@ -71,23 +64,18 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
             .commit()
     }
 
-    override fun onStop() {
-        Log.d("onStop", "OnMainActivityClosed")
-        super.onStop()
+    private fun initClickListeners() {
+        findViewById<Button>(R.id.button_invite).setOnClickListener {
+            Intent(Intent.ACTION_SEND).apply {
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    resources.getString(R.string.invite_message)
+                );
+                type = "text/plain"
+                startActivity(this)
+            }
+        }
     }
-
-//    private fun initClickListeners() {
-//        findViewById<Button>(R.id.button_invite).setOnClickListener {
-//            Intent(Intent.ACTION_SEND).apply {
-//                putExtra(
-//                    Intent.EXTRA_TEXT,
-//                    resources.getString(R.string.invite_message)
-//                );
-//                type = "text/plain"
-//                startActivity(this)
-//            }
-//        }
-//    }
 
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -122,13 +110,14 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
 
     // FilmsListFragment's click listeners
     override fun onDetailsClick(filmItem: FilmData, position: Int) = openFilmDetails(filmItem)
-
     override fun onFavoriteClick(filmItem: FilmData) {
         favoriteItems.add(filmItem)
+        Toast.makeText(this, "${filmItem.name} added to favorites list", Toast.LENGTH_SHORT).show()
     }
     override fun onDeleteClick(filmItem: FilmData) {
         val index = favoriteItems.indexOf(favoriteItems.find { it.id == filmItem.id })
         favoriteItems.removeAt(index)
+        Toast.makeText(this, "${filmItem.name} removed from favorites list", Toast.LENGTH_SHORT).show()
     }
 
     // FilmDetailsFragment's click listeners
@@ -139,6 +128,7 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
 
     // FavoritesFragment's click listeners
     override fun onFavoritesDeleteClick(position: Int) {
+        Toast.makeText(this, "${favoriteItems[position].name} removed from favorites list", Toast.LENGTH_SHORT).show()
         favoriteItems.removeAt(position)
     }
 

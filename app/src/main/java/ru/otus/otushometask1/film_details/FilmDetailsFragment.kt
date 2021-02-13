@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
+import com.google.android.material.appbar.AppBarLayout
 import ru.otus.otushometask1.DetailsData
 import ru.otus.otushometask1.FilmData
 import ru.otus.otushometask1.R
@@ -27,12 +29,12 @@ class FilmDetailsFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.fragment_details, container, false)
     }
 
