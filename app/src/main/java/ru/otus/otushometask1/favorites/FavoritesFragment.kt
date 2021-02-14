@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import ru.otus.otushometask1.FilmData
 import ru.otus.otushometask1.R
 
@@ -57,11 +58,20 @@ class FavoritesFragment : Fragment() {
                         recyclerView.adapter?.notifyItemRangeChanged(position, favoriteItems.size)
 
                         (activity as? FavoritesClickListener)?.onFavoritesDeleteClick(position)
+
+                        Snackbar.make(view, "${filmItem.name} removed from favorites list", Snackbar.LENGTH_LONG)
+                            .setAction("Undo") {
+                                favoriteItems.add(filmItem)
+                                (activity as? FavoritesClickListener)?.onDeleteCanceled(filmItem)
+                                recyclerView.adapter?.notifyDataSetChanged()
+                            }
+                            .show()
                     }
                 })
     }
 
     interface FavoritesClickListener {
-      fun onFavoritesDeleteClick(position: Int)
+        fun onFavoritesDeleteClick(position: Int)
+        fun onDeleteCanceled(item: FilmData)
     }
 }

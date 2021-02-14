@@ -4,13 +4,14 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.otus.otushometask1.dialogs.CustomDialog
 import ru.otus.otushometask1.favorites.FavoritesFragment
-import ru.otus.otushometask1.favorites.FavoritesFragment.*
+import ru.otus.otushometask1.favorites.FavoritesFragment.FavoritesClickListener
 import ru.otus.otushometask1.film_details.FilmDetailsFragment
 import ru.otus.otushometask1.films_list.FilmsAdapter
 import ru.otus.otushometask1.films_list.FilmsFragment
@@ -18,10 +19,7 @@ import ru.otus.otushometask1.films_list.FilmsFragment
 class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     FilmDetailsFragment.DetailsClickListener, FavoritesClickListener {
     private var favoriteItems = mutableListOf<FilmData>()
-
-    companion object {
-        const val EXTRA_FAVORITES_BACK = "EXTRA_FAVORITES_BACK"
-    }
+    private val noHeaderFragmentTags = arrayOf(FilmDetailsFragment.TAG)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("onCreate", "OnMainActivityCreated")
@@ -31,6 +29,15 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         openFilmsList()
         initClickListeners()
         initBottomNavigation()
+//        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        // hide the default toolbar if the fragment has its own toolbar
+        if(noHeaderFragmentTags.contains(fragment.tag.toString())) supportActionBar?.hide()
+        else supportActionBar?.show()
+
+        super.onAttachFragment(fragment)
     }
 
     private fun openFilmsList() {
@@ -65,22 +72,16 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     }
 
     private fun initClickListeners() {
-        findViewById<Button>(R.id.button_invite).setOnClickListener {
+        findViewById<FloatingActionButton>(R.id.button_invite).setOnClickListener {
             Intent(Intent.ACTION_SEND).apply {
                 putExtra(
                     Intent.EXTRA_TEXT,
                     resources.getString(R.string.invite_message)
-                );
+                )
                 type = "text/plain"
                 startActivity(this)
             }
         }
-    }
-
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-//        outState.putParcelableArrayList(EXTRA_ITEMS, java.util.ArrayList<FilmData>(items))
     }
 
     private fun initBottomNavigation() {
@@ -128,8 +129,11 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
 
     // FavoritesFragment's click listeners
     override fun onFavoritesDeleteClick(position: Int) {
-        Toast.makeText(this, "${favoriteItems[position].name} removed from favorites list", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "${favoriteItems[position].name} removed from favorites list", Toast.LENGTH_SHORT).show()
         favoriteItems.removeAt(position)
+    }
+    override fun onDeleteCanceled(item: FilmData) {
+       favoriteItems.add(item)
     }
 
 }
