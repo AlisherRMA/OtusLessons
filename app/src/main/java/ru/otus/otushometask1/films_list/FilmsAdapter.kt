@@ -6,19 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.like.LikeButton
 import com.like.OnLikeListener
-import ru.otus.otushometask1.FilmData
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 
 
 class FilmsAdapter(
-    private val layoutInflater: LayoutInflater,
     private val items: List<FilmData>,
     private val clickListener: NewsClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        val layoutInflater = LayoutInflater.from(parent.context)
+        val layoutInflater = LayoutInflater.from(parent.context)
         return FilmsVH(layoutInflater.inflate(R.layout.item_films, parent, false))
 //        return FilmsVH(view)
     }
@@ -41,7 +40,6 @@ class FilmsAdapter(
             })
 
             holder.button.setOnClickListener {
-//                holder.title.setTextColor(Color.GREEN)
                 clickListener.onDetailsClick(item, position)
             }
 

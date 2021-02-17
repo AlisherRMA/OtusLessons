@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
-import ru.otus.otushometask1.DetailsData
-import ru.otus.otushometask1.FilmData
+import ru.otus.otushometask1.data_classes.DetailsData
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 
 class FilmDetailsFragment : Fragment() {
@@ -44,10 +44,10 @@ class FilmDetailsFragment : Fragment() {
         arguments?.getParcelable<FilmData>(EXTRA_DATA).let {
             it?.name?.let { filmName -> initToolbar(view, filmName) }
 
-            view.findViewById<ImageView>(R.id.imageView).setImageDrawable(it?.image?.let { it1 ->
+            view.findViewById<ImageView>(R.id.imageView).setImageDrawable(it?.image?.let { imgRes ->
                 getDrawable(
                     requireContext(),
-                    it1
+                    imgRes
                 )
             })
             view.findViewById<TextView>(R.id.textViewDesc).text = it?.description

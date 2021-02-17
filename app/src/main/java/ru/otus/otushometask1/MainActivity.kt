@@ -3,12 +3,15 @@ package ru.otus.otushometask1
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import ru.otus.otushometask1.data_classes.DetailsData
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.dialogs.CustomDialog
 import ru.otus.otushometask1.favorites.FavoritesFragment
 import ru.otus.otushometask1.favorites.FavoritesFragment.FavoritesClickListener
@@ -21,15 +24,20 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     private var favoriteItems = mutableListOf<FilmData>()
     private val noHeaderFragmentTags = arrayOf(FilmDetailsFragment.TAG)
 
+    companion object {
+        const val EXTRA_FILMS = "EXTRA_FILMS"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("onCreate", "OnMainActivityCreated")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // check if there's savedInstanceState
+        savedInstanceState?.getParcelableArrayList<FilmData>(EXTRA_FILMS)?.let {favoriteItems = it}
 
         openFilmsList()
         initClickListeners()
         initBottomNavigation()
-//        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onAttachFragment(fragment: Fragment) {
@@ -38,6 +46,11 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         else supportActionBar?.show()
 
         super.onAttachFragment(fragment)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList(EXTRA_FILMS, ArrayList(favoriteItems))
+        super.onSaveInstanceState(outState)
     }
 
     private fun openFilmsList() {

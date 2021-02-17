@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import ru.otus.otushometask1.FilmData
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 
 class FavoritesFragment : Fragment() {
@@ -49,7 +49,6 @@ class FavoritesFragment : Fragment() {
 
         recyclerView.adapter =
             FavoritesAdapter(
-                LayoutInflater.from(requireContext()),
                 favoriteItems,
                 object : FavoritesAdapter.FavoritesClickListener {
                     override fun onDeleteClick(filmItem: FilmData, position: Int) {

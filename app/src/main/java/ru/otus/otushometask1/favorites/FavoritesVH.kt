@@ -1,12 +1,10 @@
 package ru.otus.otushometask1.favorites
 
-import android.graphics.Color
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ru.otus.otushometask1.FilmData
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 
 class FavoritesVH(itemView: View) : RecyclerView.ViewHolder(itemView) {

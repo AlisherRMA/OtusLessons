@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.like.LikeButton
-import ru.otus.otushometask1.FilmData
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 
 class FilmsVH(itemView: View) : RecyclerView.ViewHolder(itemView) {

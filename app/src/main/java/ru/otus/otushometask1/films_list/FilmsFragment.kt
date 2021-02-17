@@ -1,5 +1,6 @@
 package ru.otus.otushometask1.films_list
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_films_list.*
-import ru.otus.otushometask1.FilmData
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 import java.lang.Exception
 
@@ -96,8 +97,8 @@ class FilmsFragment : Fragment() {
 
     var listener: FilmsAdapter.NewsClickListener? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
         if (activity is FilmsAdapter.NewsClickListener) {
             listener = activity as FilmsAdapter.NewsClickListener
@@ -111,7 +112,7 @@ class FilmsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        retainInstance = true
+//        retainInstance = true
         return inflater.inflate(R.layout.fragment_films_list, container, false)
     }
 
@@ -122,7 +123,6 @@ class FilmsFragment : Fragment() {
 
     private fun initRecyclerView(view: View) {
         view.findViewById<RecyclerView>(R.id.recyclerView).adapter = FilmsAdapter(
-            LayoutInflater.from(requireContext()),
             items,
             object :
                 FilmsAdapter.NewsClickListener {
@@ -147,7 +147,7 @@ class FilmsFragment : Fragment() {
     }
 
    private fun getFavoriteFilms(){
-       arguments?.getParcelableArrayList<FilmData>(EXTRA_FAVORITE)?.let {receivedArray ->
+       arguments?.getParcelableArrayList<FilmData>(EXTRA_FAVORITE)?.let { receivedArray ->
            receivedArray.forEachIndexed { _, element ->
                items.forEach { if (it.id == element.id) it.isFavorite = true }
            }
