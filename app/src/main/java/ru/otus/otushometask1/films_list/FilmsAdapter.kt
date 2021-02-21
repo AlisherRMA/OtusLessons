@@ -1,4 +1,4 @@
-package ru.otus.otushometask1
+package ru.otus.otushometask1.films_list
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.like.LikeButton
 import com.like.OnLikeListener
+import ru.otus.otushometask1.data_classes.FilmData
+import ru.otus.otushometask1.R
 
 
 class FilmsAdapter(
@@ -16,8 +18,8 @@ class FilmsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.item_films, parent, false)
-        return FilmsVH(view)
+        return FilmsVH(layoutInflater.inflate(R.layout.item_films, parent, false))
+//        return FilmsVH(view)
     }
 
     override fun getItemCount() = items.size
@@ -38,7 +40,6 @@ class FilmsAdapter(
             })
 
             holder.button.setOnClickListener {
-//                holder.title.setTextColor(Color.GREEN)
                 clickListener.onDetailsClick(item, position)
             }
 

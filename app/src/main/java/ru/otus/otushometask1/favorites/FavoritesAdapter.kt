@@ -1,11 +1,9 @@
 package ru.otus.otushometask1.favorites
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import ru.otus.otushometask1.FilmData
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 
 class FavoritesAdapter(
