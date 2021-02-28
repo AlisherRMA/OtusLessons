@@ -3,13 +3,16 @@ package ru.otus.otushometask1
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import ru.otus.otushometask1.data.entity.PageableResponse
 import ru.otus.otushometask1.data_classes.DetailsData
 import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.dialogs.CustomDialog
@@ -33,16 +36,62 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         // check if there's savedInstanceState
-        savedInstanceState?.getParcelableArrayList<FilmData>(EXTRA_FILMS)?.let {favoriteItems = it}
+        savedInstanceState?.getParcelableArrayList<FilmData>(EXTRA_FILMS)
+            ?.let { favoriteItems = it }
 
         openFilmsList()
         initClickListeners()
         initBottomNavigation()
+        getPopularFilmsList()
+
+    }
+
+    private fun getPopularFilmsList() {
+        App.instance.filmService.getFilms()
+            .enqueue(object : Callback<PageableResponse> {
+                override fun onFailure(call: Call<PageableResponse>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onResponse(
+                    call: Call<PageableResponse>,
+                    response: Response<PageableResponse>
+                ) {
+//                    Toast.makeText(this@MainActivity, "Success2", Toast.LENGTH_SHORT).show()
+//                    items.clear()
+                    if (response.isSuccessful) {
+                        response.body()?.results.let {
+                            Toast.makeText(
+                                this@MainActivity,
+                                it?.get(0)?.title,
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+                        Toast.makeText(
+                            this@MainActivity,
+                            response.body()?.results?.size.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+//                        response.body()?.results
+//                            ?.forEach {
+//                                items.add(
+//                                    MainItem(
+//                                        it.id,
+//                                        it.title,
+//                                        "https://www.themoviedb.org/t/p/w600_and_h900_bestv2${it.image}"
+//                                    )
+//                                )
+//                            }
+                    }
+//                    adapter.notifyDataSetChanged()
+                }
+            })
     }
 
     override fun onAttachFragment(fragment: Fragment) {
         // hide the default toolbar if the fragment has its own toolbar
-        if(noHeaderFragmentTags.contains(fragment.tag.toString())) supportActionBar?.hide()
+        if (noHeaderFragmentTags.contains(fragment.tag.toString())) supportActionBar?.hide()
         else supportActionBar?.show()
 
         super.onAttachFragment(fragment)
@@ -56,7 +105,11 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     private fun openFilmsList() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, FilmsFragment.newInstance(ArrayList(favoriteItems)), FilmsFragment.TAG)
+            .replace(
+                R.id.fragmentContainer,
+                FilmsFragment.newInstance(ArrayList(favoriteItems)),
+                FilmsFragment.TAG
+            )
             .commit()
     }
 
@@ -128,10 +181,12 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         favoriteItems.add(filmItem)
         Toast.makeText(this, "${filmItem.name} added to favorites list", Toast.LENGTH_SHORT).show()
     }
+
     override fun onDeleteClick(filmItem: FilmData) {
         val index = favoriteItems.indexOf(favoriteItems.find { it.id == filmItem.id })
         favoriteItems.removeAt(index)
-        Toast.makeText(this, "${filmItem.name} removed from favorites list", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "${filmItem.name} removed from favorites list", Toast.LENGTH_SHORT)
+            .show()
     }
 
     // FilmDetailsFragment's click listeners
@@ -145,8 +200,9 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
 //        Toast.makeText(this, "${favoriteItems[position].name} removed from favorites list", Toast.LENGTH_SHORT).show()
         favoriteItems.removeAt(position)
     }
+
     override fun onDeleteCanceled(item: FilmData) {
-       favoriteItems.add(item)
+        favoriteItems.add(item)
     }
 
 }

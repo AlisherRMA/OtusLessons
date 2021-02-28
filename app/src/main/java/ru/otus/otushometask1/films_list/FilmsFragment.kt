@@ -5,11 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_films_list.*
 import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
+import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.presentation.viewmodel.FilmsListViewModel
 import java.lang.Exception
 
 class FilmsFragment : Fragment() {
@@ -81,6 +86,11 @@ class FilmsFragment : Fragment() {
         )
     )
 
+    private val viewModel: FilmsListViewModel by lazy {
+        ViewModelProvider(activity!!).get(FilmsListViewModel::class.java)
+    }
+    private lateinit var recyclerView: RecyclerView
+
     companion object {
         const val TAG = "FilmsListFragment"
         const val EXTRA_FAVORITE = "EXTRA_FAVORITE"
@@ -117,33 +127,39 @@ class FilmsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initRecyclerView(view)
+        initRecyclerView()
+
+//        viewModel.films.observe(this.viewLifecycleOwner, Observer<List<Film>> { films -> adapter.setItems(films)})
+//        viewModel.error.observe(this.viewLifecycleOwner, Observer<String> { error -> Toast.makeText(context, error, Toast.LENGTH_SHORT).show() })
+
         getFavoriteFilms()
     }
 
-    private fun initRecyclerView(view: View) {
-        view.findViewById<RecyclerView>(R.id.recyclerView).adapter = FilmsAdapter(
-            items,
-            object :
-                FilmsAdapter.NewsClickListener {
-                override fun onDetailsClick(filmItem: FilmData, position: Int) {
-                    items[position].isVisited = true
-                    recyclerView.adapter?.notifyItemChanged(position)
-                    listener?.onDetailsClick(filmItem, position)
-                }
+    private val adapter: FilmsAdapter by lazy {
+        FilmsAdapter(items, object : FilmsAdapter.NewsClickListener {
+            override fun onDetailsClick(filmItem: FilmData, position: Int) {
+                items[position].isVisited = true
+                recyclerView.adapter?.notifyItemChanged(position)
+                listener?.onDetailsClick(filmItem, position)
+            }
 
-                override fun onFavoriteClick(filmItem: FilmData) {
-                    filmItem.isFavorite = true
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    listener?.onFavoriteClick(filmItem)
-                }
+            override fun onFavoriteClick(filmItem: FilmData) {
+                filmItem.isFavorite = true
+                recyclerView.adapter?.notifyDataSetChanged()
+                listener?.onFavoriteClick(filmItem)
+            }
 
-                override fun onDeleteClick(filmItem: FilmData) {
-                    filmItem.isFavorite = false
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    listener?.onDeleteClick(filmItem)
-                }
-            })
+            override fun onDeleteClick(filmItem: FilmData) {
+                filmItem.isFavorite = false
+                recyclerView.adapter?.notifyDataSetChanged()
+                listener?.onDeleteClick(filmItem)
+            }
+        })
+    }
+
+    private fun initRecyclerView() {
+        recyclerView = view!!.findViewById(R.id.recyclerView)
+        recyclerView!!.adapter = adapter
     }
 
    private fun getFavoriteFilms(){
