@@ -9,13 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_films_list.*
-import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.presentation.viewmodel.FilmsListViewModel
-import java.lang.Exception
 
 class FilmsFragment : Fragment() {
 
@@ -85,17 +84,20 @@ class FilmsFragment : Fragment() {
             false
         )
     )
+    private var films = mutableListOf<Film>()
+    private var isLoading = false
 
     private val viewModel: FilmsListViewModel by lazy {
         ViewModelProvider(activity!!).get(FilmsListViewModel::class.java)
     }
     private lateinit var recyclerView: RecyclerView
+    private  lateinit var progressBar: View
 
     companion object {
         const val TAG = "FilmsListFragment"
         const val EXTRA_FAVORITE = "EXTRA_FAVORITE"
 
-        fun newInstance(favoriteFilms: ArrayList<FilmData>):FilmsFragment {
+        fun newInstance(favoriteFilms: ArrayList<FilmData>): FilmsFragment {
             val args = Bundle()
             args.putParcelableArrayList(EXTRA_FAVORITE, favoriteFilms)
 
@@ -122,21 +124,39 @@ class FilmsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        retainInstance = true
         return inflater.inflate(R.layout.fragment_films_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initRecyclerView()
+        progressBar = view.findViewById(R.id.progressBar)
 
-//        viewModel.films.observe(this.viewLifecycleOwner, Observer<List<Film>> { films -> adapter.setItems(films)})
-//        viewModel.error.observe(this.viewLifecycleOwner, Observer<String> { error -> Toast.makeText(context, error, Toast.LENGTH_SHORT).show() })
+
+        viewModel.films.observe(this.viewLifecycleOwner, Observer<List<Film>> { filmsList ->
+            adapter.setItems(filmsList)
+//            films.  = filmsList
+            films.addAll(filmsList)
+            isLoading = false
+            recyclerView.adapter?.notifyDataSetChanged()
+//            progressBar.visibility(View.INVISIBLE)
+            progressBar.visibility = View.INVISIBLE
+        })
+        viewModel.error.observe(
+            this.viewLifecycleOwner,
+            Observer<String> { error -> Toast.makeText(context, error, Toast.LENGTH_SHORT).show() })
+
+        viewModel.getFilms()
 
         getFavoriteFilms()
+        addOnScrollListener()
+       // var last = getLastUpdateTime()
+        val last = System.currentTimeMillis()
+
+        Toast.makeText(requireContext(), last.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private val adapter: FilmsAdapter by lazy {
-        FilmsAdapter(items, object : FilmsAdapter.NewsClickListener {
+        FilmsAdapter(object : FilmsAdapter.NewsClickListener {
             override fun onDetailsClick(filmItem: FilmData, position: Int) {
                 items[position].isVisited = true
                 recyclerView.adapter?.notifyItemChanged(position)
@@ -159,14 +179,36 @@ class FilmsFragment : Fragment() {
 
     private fun initRecyclerView() {
         recyclerView = view!!.findViewById(R.id.recyclerView)
-        recyclerView!!.adapter = adapter
+        recyclerView.adapter = adapter
     }
 
-   private fun getFavoriteFilms(){
-       arguments?.getParcelableArrayList<FilmData>(EXTRA_FAVORITE)?.let { receivedArray ->
-           receivedArray.forEachIndexed { _, element ->
-               items.forEach { if (it.id == element.id) it.isFavorite = true }
-           }
-       }
+    private fun getFavoriteFilms() {
+        arguments?.getParcelableArrayList<FilmData>(EXTRA_FAVORITE)?.let { receivedArray ->
+            receivedArray.forEachIndexed { _, element ->
+                items.forEach { if (it.id == element.id) it.isFavorite = true }
+            }
+        }
+    }
+
+    private fun addOnScrollListener() {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
+                if (!isLoading  && layoutManager.findLastVisibleItemPosition() >= films.size-1) {
+                    saveLastUpdateTime()
+                    isLoading = true
+                    progressBar.visibility = View.VISIBLE
+                    viewModel.getFilms()
+                }
+            }
+        })
+    }
+
+    private fun saveLastUpdateTime(){
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putString(getString(R.string.last_update_time), "66666668")
+            apply()
+        }
     }
 }

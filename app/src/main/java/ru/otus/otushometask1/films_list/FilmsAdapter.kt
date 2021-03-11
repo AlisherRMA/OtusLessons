@@ -13,24 +13,23 @@ import java.util.ArrayList
 
 
 class FilmsAdapter(
-    private val items: List<FilmData>,
+//    private val items: List<FilmData>,
     private val clickListener: NewsClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-//    private val items = ArrayList<Film>()
-//
-//    fun setItems(repos: List<Film>) {
+    private val items = ArrayList<Film>()
+
+    fun setItems(repos: List<Film>) {
 //        items.clear()
-//        items.addAll(repos)
-//
-//        notifyDataSetChanged()
-//    }
+        items.addAll(repos)
+
+        notifyDataSetChanged()
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return FilmsVH(layoutInflater.inflate(R.layout.item_films, parent, false))
-//        return FilmsVH(view)
     }
 
     override fun getItemCount() = items.size
@@ -40,19 +39,19 @@ class FilmsAdapter(
             val item = items[position]
             holder.bind(item)
 
-            holder.makeFavorite.setOnLikeListener(object : OnLikeListener {
-                override fun liked(likeButton: LikeButton) {
-                    Log.d("ADAPTER", item.name)
-                    clickListener.onFavoriteClick(item)
-                }
-                override fun unLiked(likeButton: LikeButton) {
-                    clickListener.onDeleteClick(item)
-                }
-            })
-
-            holder.button.setOnClickListener {
-                clickListener.onDetailsClick(item, position)
-            }
+//            holder.makeFavorite.setOnLikeListener(object : OnLikeListener {
+//                override fun liked(likeButton: LikeButton) {
+//                    Log.d("ADAPTER", item.name)
+//                    clickListener.onFavoriteClick(item)
+//                }
+//                override fun unLiked(likeButton: LikeButton) {
+//                    clickListener.onDeleteClick(item)
+//                }
+//            })
+//
+//            holder.button.setOnClickListener {
+//                clickListener.onDetailsClick(item, position)
+//            }
 
 
         }

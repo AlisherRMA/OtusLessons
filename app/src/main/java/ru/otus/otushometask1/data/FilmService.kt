@@ -7,8 +7,14 @@ import ru.otus.otushometask1.data.entity.Film
 import ru.otus.otushometask1.data.entity.PageableResponse
 
 interface FilmService {
-    @GET("movie/top_rated?api_key=bc5b28bd60b94901618a6c5e273ccf49&language=en-US&page=1")
-    fun getFilms(): Call<PageableResponse>
+    companion object {
+        const val API_KEY = "bc5b28bd60b94901618a6c5e273ccf49"
+        const val DEFAULT_LANGUAGE = "en-US"
+    }
+    @GET("movie/top_rated")
+    fun getFilms(@Query("api_key") apiKey: String = API_KEY,
+                 @Query("page") page: Int,
+                 @Query("language") language: String = DEFAULT_LANGUAGE): Call<PageableResponse>
 
     @GET("films?id=1&name=blabla")
     fun getFilmById(@Query("image") id: String, @Query("name") name:String): Call<Film>

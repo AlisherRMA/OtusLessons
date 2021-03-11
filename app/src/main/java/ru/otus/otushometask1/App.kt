@@ -1,6 +1,7 @@
 package ru.otus.otushometask1
 
 import android.app.Application
+import androidx.room.Room
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,11 +13,20 @@ class App : Application() {
 
     lateinit var filmService: FilmService
     lateinit var filmInteractor: FilmInteractor
+    lateinit var db: AppDatabase
+
+    companion object {
+        const val BASE_URL = "https://api.themoviedb.org/3/"
+
+        lateinit var instance: App
+            private set
+    }
 
     override fun onCreate() {
         super.onCreate()
         instance = this
 
+        initDB()
         initRetrofit()
         initInteractor()
     }
@@ -52,10 +62,24 @@ class App : Application() {
         filmService = retrofit.create(FilmService::class.java)
     }
 
-    companion object {
-        const val BASE_URL = "https://api.themoviedb.org/3/"
+   private fun initDB(){
+       db = Room.databaseBuilder(
+           applicationContext,
+           AppDatabase::class.java,
+           "films"
+       )
+           .allowMainThreadQueries()
+           .fallbackToDestructiveMigration()
+           .build()
+   }
 
-        lateinit var instance: App
-            private set
+
+
+    fun getInstance(): App {
+        return instance
+    }
+
+    fun getDatabase(): AppDatabase {
+        return db
     }
 }

@@ -42,51 +42,7 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         openFilmsList()
         initClickListeners()
         initBottomNavigation()
-        getPopularFilmsList()
 
-    }
-
-    private fun getPopularFilmsList() {
-        App.instance.filmService.getFilms()
-            .enqueue(object : Callback<PageableResponse> {
-                override fun onFailure(call: Call<PageableResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onResponse(
-                    call: Call<PageableResponse>,
-                    response: Response<PageableResponse>
-                ) {
-//                    Toast.makeText(this@MainActivity, "Success2", Toast.LENGTH_SHORT).show()
-//                    items.clear()
-                    if (response.isSuccessful) {
-                        response.body()?.results.let {
-                            Toast.makeText(
-                                this@MainActivity,
-                                it?.get(0)?.title,
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                        }
-                        Toast.makeText(
-                            this@MainActivity,
-                            response.body()?.results?.size.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-//                        response.body()?.results
-//                            ?.forEach {
-//                                items.add(
-//                                    MainItem(
-//                                        it.id,
-//                                        it.title,
-//                                        "https://www.themoviedb.org/t/p/w600_and_h900_bestv2${it.image}"
-//                                    )
-//                                )
-//                            }
-                    }
-//                    adapter.notifyDataSetChanged()
-                }
-            })
     }
 
     override fun onAttachFragment(fragment: Fragment) {
