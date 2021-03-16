@@ -1,17 +1,22 @@
 package ru.otus.otushometask1.presentation.view.film_details
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.EditText
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import ru.otus.otushometask1.data_classes.DetailsData
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.presentation.view.films_list.FilmsVH
 
 class FilmDetailsFragment : Fragment() {
     companion object {
@@ -29,30 +34,60 @@ class FilmDetailsFragment : Fragment() {
         }
     }
 
+    private lateinit var image: ImageView
+    private lateinit var progressBar: ProgressBar
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initViews(view)
         arguments?.getParcelable<Film>(EXTRA_DATA).let {
             it?.title?.let { filmName -> initToolbar(view, filmName) }
+            it?.image?.let {
+                Glide.with(image.context)
+                    .load("${FilmsVH.filmsUrl}${it}")
+                    .placeholder(R.drawable.ic_image)
+                    .error(R.drawable.ic_error)
+                    .override(image.resources.getDimensionPixelSize(R.dimen.image_size))
+                    .centerCrop()
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            progressBar.visibility = View.GONE
+                            return false
+                        }
 
-//            view.findViewById<ImageView>(R.id.imageView).setImageDrawable(it?.image?.let { imgRes ->
-//                getDrawable(
-//                    requireContext(),
-//                    imgRes
-//                )
-//            })
-//            view.findViewById<TextView>(R.id.textViewDesc).text = it?.description
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            progressBar.visibility = View.GONE
+                            return false
+                        }
+
+                    })
+                    .into(image)
+            }
+
+
+            view.findViewById<TextView>(R.id.textViewDesc).text = it?.overview
         }
     }
 
-    private fun initToolbar(view: View, toolbarTitle: String){
+    private fun initToolbar(view: View, toolbarTitle: String) {
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         toolbar.title = toolbarTitle
 
@@ -61,6 +96,11 @@ class FilmDetailsFragment : Fragment() {
             activity!!.onBackPressed()
             (activity as AppCompatActivity).supportActionBar?.show()
         }
+    }
+
+    private fun initViews(view: View) {
+        image = view.findViewById<ImageView>(R.id.imageView)
+        progressBar = view.findViewById<ProgressBar>(R.id.progress)
     }
 
     override fun onDestroyView() {

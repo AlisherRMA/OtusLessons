@@ -14,6 +14,7 @@ data class Film(
     @PrimaryKey @SerializedName("id") val id: Int,
     @ColumnInfo(name = "image") @SerializedName("poster_path") val image: String,
     @ColumnInfo(name = "title") @SerializedName("title") val title: String,
+    @ColumnInfo(name = "overview") @SerializedName("overview") val overview: String,
     @ColumnInfo(defaultValue = "CURRENT_TIMESTAMP") val createDate: String
 ) : Parcelable
 

@@ -6,7 +6,7 @@ import ru.otus.otushometask1.data.dao.FilmDao
 import ru.otus.otushometask1.data.entity.FavoriteFilms
 import ru.otus.otushometask1.data.entity.Film
 
-@Database(entities = [Film::class, FavoriteFilms::class], version = 2)
+@Database(entities = [Film::class, FavoriteFilms::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun filmDao(): FilmDao
 }

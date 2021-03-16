@@ -156,7 +156,6 @@ class FilmsFragment : Fragment() {
             override fun onDetailsClick(filmItem: Film, position: Int) {
 //                items[position].isVisited = true
 //                recyclerView.adapter?.notifyItemChanged(position)
-                Toast.makeText(requireContext(), filmItem.title, Toast.LENGTH_SHORT).show()
                 listener?.onDetailsClick(filmItem, position)
             }
 
