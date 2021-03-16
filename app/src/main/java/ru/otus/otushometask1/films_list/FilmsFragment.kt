@@ -134,32 +134,27 @@ class FilmsFragment : Fragment() {
 
         viewModel.films.observe(this.viewLifecycleOwner, Observer<List<Film>> { filmsList ->
             adapter.setItems(filmsList)
-//            films.  = filmsList
             films.addAll(filmsList)
             isLoading = false
             recyclerView.adapter?.notifyDataSetChanged()
-//            progressBar.visibility(View.INVISIBLE)
             progressBar.visibility = View.INVISIBLE
         })
         viewModel.error.observe(
             this.viewLifecycleOwner,
             Observer<String> { error -> Toast.makeText(context, error, Toast.LENGTH_SHORT).show() })
 
-        viewModel.getFilms()
+        viewModel.getFilms(true)
 
         getFavoriteFilms()
         addOnScrollListener()
-       // var last = getLastUpdateTime()
-        val last = System.currentTimeMillis()
-
-        Toast.makeText(requireContext(), last.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private val adapter: FilmsAdapter by lazy {
         FilmsAdapter(object : FilmsAdapter.NewsClickListener {
-            override fun onDetailsClick(filmItem: FilmData, position: Int) {
-                items[position].isVisited = true
-                recyclerView.adapter?.notifyItemChanged(position)
+            override fun onDetailsClick(filmItem: Film, position: Int) {
+//                items[position].isVisited = true
+//                recyclerView.adapter?.notifyItemChanged(position)
+                Toast.makeText(requireContext(), filmItem.title, Toast.LENGTH_SHORT).show()
                 listener?.onDetailsClick(filmItem, position)
             }
 
@@ -195,20 +190,11 @@ class FilmsFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
                 if (!isLoading  && layoutManager.findLastVisibleItemPosition() >= films.size-1) {
-                    saveLastUpdateTime()
                     isLoading = true
                     progressBar.visibility = View.VISIBLE
-                    viewModel.getFilms()
+                    viewModel.getFilms(false)
                 }
             }
         })
-    }
-
-    private fun saveLastUpdateTime(){
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
-            putString(getString(R.string.last_update_time), "66666668")
-            apply()
-        }
     }
 }

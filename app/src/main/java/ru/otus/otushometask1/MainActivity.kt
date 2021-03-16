@@ -12,6 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.otus.otushometask1.data.entity.Film
 import ru.otus.otushometask1.data.entity.PageableResponse
 import ru.otus.otushometask1.data_classes.DetailsData
 import ru.otus.otushometask1.data_classes.FilmData
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
             .commit()
     }
 
-    private fun openFilmDetails(filmData: FilmData) {
+    private fun openFilmDetails(filmData: Film) {
         supportFragmentManager
             .beginTransaction()
             .replace(
@@ -132,7 +133,7 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     }
 
     // FilmsListFragment's click listeners
-    override fun onDetailsClick(filmItem: FilmData, position: Int) = openFilmDetails(filmItem)
+    override fun onDetailsClick(filmItem: Film, position: Int) = openFilmDetails(filmItem)
     override fun onFavoriteClick(filmItem: FilmData) {
         favoriteItems.add(filmItem)
         Toast.makeText(this, "${filmItem.name} added to favorites list", Toast.LENGTH_SHORT).show()

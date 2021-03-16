@@ -15,13 +15,14 @@ import androidx.fragment.app.Fragment
 import ru.otus.otushometask1.data_classes.DetailsData
 import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
+import ru.otus.otushometask1.data.entity.Film
 
 class FilmDetailsFragment : Fragment() {
     companion object {
         const val TAG = "FilmDetailsFragment"
         const val EXTRA_DATA = "EXTRA_DATA"
 
-        fun newInstance(filmData: FilmData): FilmDetailsFragment {
+        fun newInstance(filmData: Film): FilmDetailsFragment {
             val args = Bundle()
             args.putParcelable(EXTRA_DATA, filmData)
 
@@ -41,16 +42,16 @@ class FilmDetailsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.getParcelable<FilmData>(EXTRA_DATA).let {
-            it?.name?.let { filmName -> initToolbar(view, filmName) }
+        arguments?.getParcelable<Film>(EXTRA_DATA).let {
+            it?.title?.let { filmName -> initToolbar(view, filmName) }
 
-            view.findViewById<ImageView>(R.id.imageView).setImageDrawable(it?.image?.let { imgRes ->
-                getDrawable(
-                    requireContext(),
-                    imgRes
-                )
-            })
-            view.findViewById<TextView>(R.id.textViewDesc).text = it?.description
+//            view.findViewById<ImageView>(R.id.imageView).setImageDrawable(it?.image?.let { imgRes ->
+//                getDrawable(
+//                    requireContext(),
+//                    imgRes
+//                )
+//            })
+//            view.findViewById<TextView>(R.id.textViewDesc).text = it?.description
         }
     }
 

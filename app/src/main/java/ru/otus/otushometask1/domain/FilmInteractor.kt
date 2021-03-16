@@ -1,6 +1,7 @@
 package ru.otus.otushometask1.domain
 
 
+import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import retrofit2.Call
@@ -12,6 +13,7 @@ import ru.otus.otushometask1.data.FilmService
 import ru.otus.otushometask1.data.entity.Film
 import ru.otus.otushometask1.data.entity.PageableResponse
 import ru.otus.otushometask1.data.repositories.FavoritesRepository
+import ru.otus.otushometask1.data.repositories.PrefRepository
 import kotlin.coroutines.coroutineContext
 
 
@@ -21,20 +23,32 @@ class FilmInteractor(private val filmService: FilmService) {
         FavoritesRepository.getInstance()
     }
 
-    fun getFilms(page: Int, callback: GetRepoCallback) {
-        favoritesRepository.clearFilmsTable()
+    private val prefRepository by lazy { PrefRepository(App.instance) }
+
+    private var currentPage: Int
+        get() = prefRepository.getLastRequestedPage()
+        set(page) {
+            prefRepository.setLastRequestedPage(page)
+        }
+
+    fun getFilms(isInitial: Boolean, callback: GetRepoCallback) {
         val cachedFilmsSize = getFilmsSize()
-        if (cachedFilmsSize > 0) {
+        if(isInitial && cachedFilmsSize == 0) currentPage = 1
+        if(!isInitial) currentPage++
+        if (cachedFilmsSize > 0 && cachedFilmsSize/20 >= currentPage) {
+            // if the requested page is already in the cache, return movies from the cache
             callback.onSuccess(favoritesRepository.selectAll())
         } else {
-            filmService.getFilms(page = page).enqueue(object : Callback<PageableResponse> {
+            // otherwise load films
+            filmService.getFilms(page = currentPage).enqueue(object : Callback<PageableResponse> {
                 override fun onResponse(
                     call: Call<PageableResponse>,
                     response: Response<PageableResponse>
                 ) {
                     if (response.isSuccessful) {
-                        favoritesRepository.insertFilms(response.body()!!.results)
-                        callback.onSuccess(favoritesRepository.selectAll())
+                        val films = response.body()!!.results
+                        favoritesRepository.insertFilms(films)
+                        callback.onSuccess(films)
                     } else {
                         callback.onError(response.code().toString() + "")
                     }

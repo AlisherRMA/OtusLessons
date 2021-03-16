@@ -49,16 +49,16 @@ class FilmsAdapter(
 //                }
 //            })
 //
-//            holder.button.setOnClickListener {
-//                clickListener.onDetailsClick(item, position)
-//            }
+            holder.button.setOnClickListener {
+                clickListener.onDetailsClick(item, position)
+            }
 
 
         }
     }
 
     interface NewsClickListener {
-        fun onDetailsClick(filmItem: FilmData, position: Int)
+        fun onDetailsClick(filmItem: Film, position: Int)
         fun onFavoriteClick(filmItem: FilmData)
         fun onDeleteClick(filmItem: FilmData)
     }
