@@ -1,4 +1,4 @@
-package ru.otus.otushometask1.films_list
+package ru.otus.otushometask1.presentation.view.films_list
 
 import android.content.Context
 import android.os.Bundle
@@ -101,7 +101,8 @@ class FilmsFragment : Fragment() {
             val args = Bundle()
             args.putParcelableArrayList(EXTRA_FAVORITE, favoriteFilms)
 
-            val fragment = FilmsFragment()
+            val fragment =
+                FilmsFragment()
             fragment.arguments = args
             return fragment
         }
@@ -150,7 +151,8 @@ class FilmsFragment : Fragment() {
     }
 
     private val adapter: FilmsAdapter by lazy {
-        FilmsAdapter(object : FilmsAdapter.NewsClickListener {
+        FilmsAdapter(object :
+            FilmsAdapter.NewsClickListener {
             override fun onDetailsClick(filmItem: Film, position: Int) {
 //                items[position].isVisited = true
 //                recyclerView.adapter?.notifyItemChanged(position)

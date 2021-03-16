@@ -1,4 +1,4 @@
-package ru.otus.otushometask1.dialogs
+package ru.otus.otushometask1.presentation.view.dialogs
 
 import android.app.Dialog
 import android.content.Context

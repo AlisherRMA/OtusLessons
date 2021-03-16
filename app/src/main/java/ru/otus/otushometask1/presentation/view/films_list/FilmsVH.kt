@@ -1,8 +1,6 @@
-package ru.otus.otushometask1.films_list
+package ru.otus.otushometask1.presentation.view.films_list
 
-import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -14,7 +12,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.like.LikeButton
-import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
 

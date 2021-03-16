@@ -9,19 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.otus.otushometask1.data.entity.Film
-import ru.otus.otushometask1.data.entity.PageableResponse
 import ru.otus.otushometask1.data_classes.DetailsData
 import ru.otus.otushometask1.data_classes.FilmData
-import ru.otus.otushometask1.dialogs.CustomDialog
-import ru.otus.otushometask1.favorites.FavoritesFragment
-import ru.otus.otushometask1.favorites.FavoritesFragment.FavoritesClickListener
-import ru.otus.otushometask1.film_details.FilmDetailsFragment
-import ru.otus.otushometask1.films_list.FilmsAdapter
-import ru.otus.otushometask1.films_list.FilmsFragment
+import ru.otus.otushometask1.presentation.view.dialogs.CustomDialog
+import ru.otus.otushometask1.presentation.view.favorites.FavoritesFragment
+import ru.otus.otushometask1.presentation.view.favorites.FavoritesFragment.FavoritesClickListener
+import ru.otus.otushometask1.presentation.view.film_details.FilmDetailsFragment
+import ru.otus.otushometask1.presentation.view.films_list.FilmsAdapter
+import ru.otus.otushometask1.presentation.view.films_list.FilmsFragment
 
 class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     FilmDetailsFragment.DetailsClickListener, FavoritesClickListener {
@@ -123,7 +119,8 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else {
-            val dialog: Dialog = CustomDialog(this)
+            val dialog: Dialog =
+                CustomDialog(this)
             dialog.setCancelable(false)
             dialog.setOnDismissListener {
                 super.onBackPressed()

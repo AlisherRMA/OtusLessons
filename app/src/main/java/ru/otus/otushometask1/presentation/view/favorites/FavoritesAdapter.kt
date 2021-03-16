@@ -1,4 +1,4 @@
-package ru.otus.otushometask1.favorites
+package ru.otus.otushometask1.presentation.view.favorites
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

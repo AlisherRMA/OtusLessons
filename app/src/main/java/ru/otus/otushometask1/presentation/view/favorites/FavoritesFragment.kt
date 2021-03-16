@@ -1,4 +1,4 @@
-package ru.otus.otushometask1.favorites
+package ru.otus.otushometask1.presentation.view.favorites
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,7 +21,8 @@ class FavoritesFragment : Fragment() {
             val args = Bundle()
             args.putParcelableArrayList(EXTRA_FAVORITE, favoriteFilms)
 
-            val fragment = FavoritesFragment()
+            val fragment =
+                FavoritesFragment()
             fragment.arguments = args
             return fragment
         }
@@ -50,7 +51,8 @@ class FavoritesFragment : Fragment() {
         recyclerView.adapter =
             FavoritesAdapter(
                 favoriteItems,
-                object : FavoritesAdapter.FavoritesClickListener {
+                object :
+                    FavoritesAdapter.FavoritesClickListener {
                     override fun onDeleteClick(filmItem: FilmData, position: Int) {
                         favoriteItems.removeAt(position)
                         recyclerView.adapter?.notifyItemRemoved(position)
@@ -58,7 +60,11 @@ class FavoritesFragment : Fragment() {
 
                         (activity as? FavoritesClickListener)?.onFavoritesDeleteClick(position)
 
-                        Snackbar.make(view, "${filmItem.name} removed from favorites list", Snackbar.LENGTH_LONG)
+                        Snackbar.make(
+                            view,
+                            "${filmItem.name} removed from favorites list",
+                            Snackbar.LENGTH_LONG
+                        )
                             .setAction("Undo") {
                                 favoriteItems.add(filmItem)
                                 (activity as? FavoritesClickListener)?.onDeleteCanceled(filmItem)
