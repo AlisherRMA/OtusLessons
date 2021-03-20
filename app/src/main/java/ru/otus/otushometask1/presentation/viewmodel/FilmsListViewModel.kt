@@ -11,17 +11,10 @@ import ru.otus.otushometask1.data.repositories.PrefRepository
 import ru.otus.otushometask1.domain.FilmInteractor
 
 class FilmsListViewModel(application: Application) : AndroidViewModel(application) {
-    companion object {
-//        private var currentPage = 0
-    }
-
     private val filmsLiveData = MutableLiveData<List<Film>>()
     private val errorLiveData = MutableLiveData<String>()
 
     private  val favoriteFilmsLiveData = MutableLiveData<List<Film>>()
-
-//    private val prefRepository by lazy { PrefRepository(getApplication()) }
-//    private val selectedRepoUrlLiveData = MutableLiveData<String>()
 
     private val filmsInteractor = App.instance.filmInteractor
 
@@ -34,9 +27,6 @@ class FilmsListViewModel(application: Application) : AndroidViewModel(applicatio
 
     val error: LiveData<String>
         get() = errorLiveData
-
-//    val selectedRepoUrl: LiveData<String>
-//        get() = selectedRepoUrlLiveData
 
     fun getFilms(isInitial: Boolean) {
         filmsInteractor.getFilms(isInitial, object : FilmInteractor.GetRepoCallback {
@@ -60,13 +50,5 @@ class FilmsListViewModel(application: Application) : AndroidViewModel(applicatio
         filmsInteractor.makeFavorite(film, isLiked)
         getFavoriteFilms()
     }
-
-    fun onChange(){
-        filmsLiveData.postValue(null)
-    }
-
-//    fun onRepoSelect(repoUrl: String) {
-//        selectedRepoUrlLiveData.postValue(repoUrl)
-//    }
 
 }

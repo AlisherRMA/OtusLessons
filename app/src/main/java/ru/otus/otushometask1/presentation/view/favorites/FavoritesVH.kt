@@ -18,9 +18,8 @@ class FavoritesVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val image: ImageView = itemView.findViewById(R.id.fav_image)
     val deleteBtn: ImageView = itemView.findViewById(R.id.fav_delete)
 
-    fun bind(item: Film){
+    fun bind(item: Film) {
         title.text = item.title
-//        image.setBackgroundResource(item.image)
 
         Glide.with(image.context)
             .load("${FilmsVH.filmsUrl}${item.image}")

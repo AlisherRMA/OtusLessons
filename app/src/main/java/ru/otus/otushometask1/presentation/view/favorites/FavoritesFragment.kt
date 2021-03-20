@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
 import ru.otus.otushometask1.presentation.viewmodel.FilmsListViewModel
@@ -48,16 +49,13 @@ class FavoritesFragment : Fragment() {
             recyclerView.adapter?.notifyDataSetChanged()
         })
 
-
-
-
         initRecycler(view)
     }
 
     private fun initRecycler(view: View) {
         recyclerView = view.findViewById(R.id.recyclerView)
 
-         recyclerView.adapter =
+        recyclerView.adapter =
             FavoritesAdapter(
                 favoriteItems,
                 object :
@@ -67,17 +65,16 @@ class FavoritesFragment : Fragment() {
                         recyclerView.adapter?.notifyItemRemoved(position)
                         recyclerView.adapter?.notifyItemRangeChanged(position, favoriteItems.size)
 
-//                        Snackbar.make(
-//                            view,
-//                            "${filmItem.name} removed from favorites list",
-//                            Snackbar.LENGTH_LONG
-//                        )
-//                            .setAction("Undo") {
-//                                favoriteItems.add(filmItem)
-//                                (activity as? FavoritesClickListener)?.onDeleteCanceled(filmItem)
-//                                recyclerView.adapter?.notifyDataSetChanged()
-//                            }
-//                            .show()
+                        Snackbar.make(
+                            view,
+                            "${filmItem.title} removed from favorites list",
+                            Snackbar.LENGTH_LONG
+                        )
+                            .setAction("Undo") {
+                                viewModel.makeFavorite(filmItem, true)
+                                recyclerView.adapter?.notifyDataSetChanged()
+                            }
+                            .show()
                     }
                 })
     }

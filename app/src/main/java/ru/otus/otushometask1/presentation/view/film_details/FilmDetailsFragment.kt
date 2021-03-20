@@ -99,8 +99,8 @@ class FilmDetailsFragment : Fragment() {
     }
 
     private fun initViews(view: View) {
-        image = view.findViewById<ImageView>(R.id.imageView)
-        progressBar = view.findViewById<ProgressBar>(R.id.progress)
+        image = view.findViewById(R.id.imageView)
+        progressBar = view.findViewById(R.id.progress)
     }
 
     override fun onDestroyView() {

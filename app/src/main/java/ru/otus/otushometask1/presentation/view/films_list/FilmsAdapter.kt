@@ -11,7 +11,6 @@ import java.util.ArrayList
 
 
 class FilmsAdapter(
-//    private val items: List<FilmData>,
     private val clickListener: NewsClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -45,7 +44,6 @@ class FilmsAdapter(
 
             holder.makeFavorite.setOnLikeListener(object : OnLikeListener {
                 override fun liked(likeButton: LikeButton) {
-//                    Log.d("ADAPTER", item.name)
                     clickListener.onFavoriteClick(item)
                 }
                 override fun unLiked(likeButton: LikeButton) {
