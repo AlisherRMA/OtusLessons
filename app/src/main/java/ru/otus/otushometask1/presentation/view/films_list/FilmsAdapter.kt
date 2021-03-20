@@ -2,7 +2,12 @@ package ru.otus.otushometask1.presentation.view.films_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
+import com.like.LikeButton
+import com.like.OnLikeListener
+import ru.otus.otushometask1.App
 import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
@@ -17,7 +22,7 @@ class FilmsAdapter(
     private val items = ArrayList<Film>()
 
     fun setItems(repos: List<Film>) {
-//        items.clear()
+        items.clear()
         items.addAll(repos)
 
         notifyDataSetChanged()
@@ -42,15 +47,15 @@ class FilmsAdapter(
             val item = items[position]
             holder.bind(item)
 
-//            holder.makeFavorite.setOnLikeListener(object : OnLikeListener {
-//                override fun liked(likeButton: LikeButton) {
+            holder.makeFavorite.setOnLikeListener(object : OnLikeListener {
+                override fun liked(likeButton: LikeButton) {
 //                    Log.d("ADAPTER", item.name)
-//                    clickListener.onFavoriteClick(item)
-//                }
-//                override fun unLiked(likeButton: LikeButton) {
-//                    clickListener.onDeleteClick(item)
-//                }
-//            })
+                    clickListener.onFavoriteClick(item)
+                }
+                override fun unLiked(likeButton: LikeButton) {
+                    clickListener.onDeleteClick(item)
+                }
+            })
 //
             holder.button.setOnClickListener {
                 clickListener.onDetailsClick(item, position)
@@ -62,7 +67,7 @@ class FilmsAdapter(
 
     interface NewsClickListener {
         fun onDetailsClick(filmItem: Film, position: Int)
-        fun onFavoriteClick(filmItem: FilmData)
-        fun onDeleteClick(filmItem: FilmData)
+        fun onFavoriteClick(filmItem: Film)
+        fun onDeleteClick(filmItem: Film)
     }
 }

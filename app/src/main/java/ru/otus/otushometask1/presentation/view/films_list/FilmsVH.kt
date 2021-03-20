@@ -33,7 +33,7 @@ class FilmsVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 //            title.setTextColor(Color.WHITE)
 //        }
 
-//        makeFavorite.isLiked = item.isFavorite
+        makeFavorite.isLiked = item.isLiked
         title.text = item.title
         progressBar.visibility = View.VISIBLE
 
@@ -67,7 +67,5 @@ class FilmsVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             })
             .into(image)
-
-//        image.setImageResource(item.image)
     }
 }

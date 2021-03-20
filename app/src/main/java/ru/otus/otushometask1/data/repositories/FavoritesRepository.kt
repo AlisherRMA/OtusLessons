@@ -1,5 +1,6 @@
 package ru.otus.otushometask1.data.repositories
 
+import android.widget.Toast
 import ru.otus.otushometask1.App
 import ru.otus.otushometask1.data.dao.FilmDao
 import ru.otus.otushometask1.data.entity.Film
@@ -26,15 +27,28 @@ object FavoritesRepository {
         return filmDao.selectAll()
     }
 
+    fun getFavorites(): List<Film>{
+        return  filmDao.selectAllFavorites()
+    }
+
     fun insertFilms(films: List<Film>) {
-        return  filmDao.insertFilms(films)
+        return filmDao.insertFilms(films)
+    }
+
+    fun makeFavorite(id: Int, isLiked: Boolean) {
+        return filmDao.makeFavorite(id, isLiked)
+    }
+
+    fun makeFavorite(film: Film, isLiked: Boolean) {
+        film.isLiked = isLiked
+        return filmDao.makeFavorite(film)
     }
 
     fun selectById(id: Int): Film? {
         return filmDao.selectById(id)
     }
 
-    fun likeMovie(movie: Film){
+    fun likeMovie(movie: Film) {
         filmDao.insertFilm(movie)
     }
 
@@ -42,7 +56,7 @@ object FavoritesRepository {
         filmDao.deleteFilm(movie)
     }
 
-    fun clearFilmsTable(){
+    fun clearFilmsTable() {
         filmDao.clearTable()
     }
 

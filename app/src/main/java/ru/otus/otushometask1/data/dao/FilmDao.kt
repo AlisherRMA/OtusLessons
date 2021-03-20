@@ -9,8 +9,8 @@ interface FilmDao {
     @Query("SELECT * FROM films ORDER BY createDate")
     fun selectAll(): List<Film>
 
-    @Query("SELECT * from favorite_films")
-    fun selectAllFavorites(): List<FavoriteFilms>
+    @Query("select * from films where is_liked=1")
+    fun selectAllFavorites(): List<Film>
 
     @Query("SELECT * FROM films WHERE id=:id")
     fun selectById(id: Int): Film?
@@ -20,6 +20,12 @@ interface FilmDao {
 
     @Insert
     fun insertFilm(film: Film)
+
+    @Query("UPDATE films SET is_liked = :isLiked WHERE id = :id")
+    fun makeFavorite(id: Int, isLiked: Boolean)
+
+    @Update
+    fun makeFavorite(film: Film)
 
     @Query("DELETE FROM films")
     fun clearTable()

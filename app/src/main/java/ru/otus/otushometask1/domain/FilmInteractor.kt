@@ -1,20 +1,15 @@
 package ru.otus.otushometask1.domain
 
 
-import android.app.Application
-import android.util.Log
-import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.otus.otushometask1.App
-import ru.otus.otushometask1.MainActivity
 import ru.otus.otushometask1.data.FilmService
 import ru.otus.otushometask1.data.entity.Film
 import ru.otus.otushometask1.data.entity.PageableResponse
 import ru.otus.otushometask1.data.repositories.FavoritesRepository
 import ru.otus.otushometask1.data.repositories.PrefRepository
-import kotlin.coroutines.coroutineContext
 
 
 class FilmInteractor(private val filmService: FilmService) {
@@ -59,6 +54,14 @@ class FilmInteractor(private val filmService: FilmService) {
                 }
             })
         }
+    }
+
+    fun getFavorites(): List<Film> {
+        return favoritesRepository.getFavorites()
+    }
+
+    fun makeFavorite(film: Film, isLiked: Boolean){
+       return favoritesRepository.makeFavorite(film, isLiked)
     }
 
     fun getFilmsSize(): Int {

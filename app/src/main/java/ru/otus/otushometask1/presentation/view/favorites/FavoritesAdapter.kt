@@ -3,11 +3,11 @@ package ru.otus.otushometask1.presentation.view.favorites
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
+import ru.otus.otushometask1.data.entity.Film
 
 class FavoritesAdapter(
-    private val items: List<FilmData>,
+    private val items: MutableList<Film>,
     private val clickListener: FavoritesClickListener
 ) : RecyclerView.Adapter<FavoritesVH>() {
 
@@ -25,11 +25,11 @@ class FavoritesAdapter(
             holder.bind(item)
 
         holder.deleteBtn.setOnClickListener{
-            clickListener.onDeleteClick(item, position);
+            clickListener.onDeleteClick(item, position)
         }
     }
 
     interface FavoritesClickListener {
-        fun onDeleteClick(filmItem: FilmData, position: Int)
+        fun onDeleteClick(filmItem: Film, position: Int)
     }
 }

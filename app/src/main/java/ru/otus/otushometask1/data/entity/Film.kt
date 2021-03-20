@@ -15,6 +15,7 @@ data class Film(
     @ColumnInfo(name = "image") @SerializedName("poster_path") val image: String,
     @ColumnInfo(name = "title") @SerializedName("title") val title: String,
     @ColumnInfo(name = "overview") @SerializedName("overview") val overview: String,
+    @ColumnInfo(name = "is_liked") var isLiked: Boolean,
     @ColumnInfo(defaultValue = "CURRENT_TIMESTAMP") val createDate: String
 ) : Parcelable
 
