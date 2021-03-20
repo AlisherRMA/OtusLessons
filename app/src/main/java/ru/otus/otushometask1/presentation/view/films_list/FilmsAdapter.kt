@@ -2,13 +2,9 @@ package ru.otus.otushometask1.presentation.view.films_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.like.LikeButton
 import com.like.OnLikeListener
-import ru.otus.otushometask1.App
-import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
 import java.util.ArrayList

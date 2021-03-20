@@ -10,7 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
-import ru.otus.otushometask1.data_classes.DetailsData
+import ru.otus.otushometask1.data.entity.DetailsData
 import ru.otus.otushometask1.presentation.view.dialogs.CustomDialog
 import ru.otus.otushometask1.presentation.view.favorites.FavoritesFragment
 import ru.otus.otushometask1.presentation.view.film_details.FilmDetailsFragment

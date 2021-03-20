@@ -43,7 +43,7 @@ class FilmInteractor(private val filmService: FilmService) {
                     if (response.isSuccessful) {
                         val films = response.body()!!.results
                         favoritesRepository.insertFilms(films)
-                        callback.onSuccess(films)
+                        callback.onSuccess(favoritesRepository.selectAll())
                     } else {
                         callback.onError(response.code().toString() + "")
                     }

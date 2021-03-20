@@ -2,6 +2,7 @@ package ru.otus.otushometask1.presentation.view.films_list
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
-import ru.otus.otushometask1.data_classes.FilmData
 import ru.otus.otushometask1.presentation.viewmodel.FilmsListViewModel
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class FilmsFragment : Fragment() {
 
@@ -29,13 +32,11 @@ class FilmsFragment : Fragment() {
 
     companion object {
         const val TAG = "FilmsListFragment"
-        const val EXTRA_FAVORITE = "EXTRA_FAVORITE"
 
         fun newInstance(): FilmsFragment {
             val args = Bundle()
 
-            val fragment =
-                FilmsFragment()
+            val fragment = FilmsFragment()
             fragment.arguments = args
             return fragment
         }
@@ -67,15 +68,28 @@ class FilmsFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
 
         viewModel.films.observe(this.viewLifecycleOwner, Observer<List<Film>> { filmsList ->
-            adapter.setItems(filmsList)
             films.clear()
             films.addAll(filmsList)
-            isLoading = false
+            adapter.setItems(filmsList)
             progressBar.visibility = View.INVISIBLE
+            Timer().schedule(timerTask {
+                isLoading = false
+            }, 2000)
+
         })
         viewModel.error.observe(
             this.viewLifecycleOwner,
-            Observer<String> { error -> Toast.makeText(context, error, Toast.LENGTH_SHORT).show() })
+            Observer<String> {
+                Snackbar.make(
+                    view,
+                    "Произошла ошибка во время получения данных",
+                    Snackbar.LENGTH_INDEFINITE
+                )
+                    .setAction("Повторить") {
+                        viewModel.getFilms(true)
+                    }
+                    .show()
+            })
 
         addOnScrollListener()
     }

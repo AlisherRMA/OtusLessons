@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import ru.otus.otushometask1.data_classes.DetailsData
+import ru.otus.otushometask1.data.entity.DetailsData
 import ru.otus.otushometask1.R
 import ru.otus.otushometask1.data.entity.Film
 import ru.otus.otushometask1.presentation.view.films_list.FilmsVH
