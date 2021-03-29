@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.like.LikeButton
 import com.like.OnLikeListener
 import ru.otus.otushometask1.R
-import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.data.database.entity.Film
 import java.util.ArrayList
 
 

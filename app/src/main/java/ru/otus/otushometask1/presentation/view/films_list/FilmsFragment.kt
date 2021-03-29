@@ -2,26 +2,23 @@ package ru.otus.otushometask1.presentation.view.films_list
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import ru.otus.otushometask1.R
-import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.data.database.entity.Film
 import ru.otus.otushometask1.presentation.viewmodel.FilmsListViewModel
 import java.util.*
 import kotlin.concurrent.timerTask
 
 class FilmsFragment : Fragment() {
-
-    private var films = mutableListOf<Film>()
     private var isLoading = false
 
     private val viewModel: FilmsListViewModel by lazy {
@@ -68,8 +65,6 @@ class FilmsFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
 
         viewModel.films.observe(this.viewLifecycleOwner, Observer<List<Film>> { filmsList ->
-            films.clear()
-            films.addAll(filmsList)
             adapter.setItems(filmsList)
             progressBar.visibility = View.INVISIBLE
             Timer().schedule(timerTask {
@@ -80,6 +75,9 @@ class FilmsFragment : Fragment() {
         viewModel.error.observe(
             this.viewLifecycleOwner,
             Observer<String> {
+                val bottomNavigationView: BottomNavigationView =
+                    activity!!.findViewById(R.id.nav_view)
+
                 Snackbar.make(
                     view,
                     "Произошла ошибка во время получения данных",
@@ -88,6 +86,7 @@ class FilmsFragment : Fragment() {
                     .setAction("Повторить") {
                         viewModel.getFilms(true)
                     }
+                    .setAnchorView(bottomNavigationView)
                     .show()
             })
 
@@ -116,7 +115,11 @@ class FilmsFragment : Fragment() {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
-                if (!isLoading && layoutManager.findLastVisibleItemPosition() >= films.size - 1) {
+                val childCount = layoutManager.childCount
+                val itemCount = layoutManager.itemCount
+                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+
+                if (!isLoading && childCount + firstVisibleItem >= itemCount) {
                     isLoading = true
                     progressBar.visibility = View.VISIBLE
                     viewModel.getFilms(false)

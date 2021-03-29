@@ -1,4 +1,4 @@
-package ru.otus.otushometask1.data.repositories
+package ru.otus.otushometask1.data.database.repositories
 
 import android.content.Context
 import android.content.SharedPreferences

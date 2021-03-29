@@ -1,13 +1,11 @@
 package ru.otus.otushometask1.presentation.viewmodel
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.otus.otushometask1.App
-import ru.otus.otushometask1.data.entity.Film
-import ru.otus.otushometask1.data.repositories.PrefRepository
+import ru.otus.otushometask1.data.database.entity.Film
 import ru.otus.otushometask1.domain.FilmInteractor
 
 class FilmsListViewModel(application: Application) : AndroidViewModel(application) {

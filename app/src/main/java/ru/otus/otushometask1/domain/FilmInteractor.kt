@@ -5,20 +5,24 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.otus.otushometask1.App
-import ru.otus.otushometask1.data.FilmService
-import ru.otus.otushometask1.data.entity.Film
-import ru.otus.otushometask1.data.entity.PageableResponse
-import ru.otus.otushometask1.data.repositories.FavoritesRepository
-import ru.otus.otushometask1.data.repositories.PrefRepository
+import ru.otus.otushometask1.data.network.repositories.FilmService
+import ru.otus.otushometask1.data.database.entity.Film
+import ru.otus.otushometask1.data.database.repositories.FilmsRepository
+import ru.otus.otushometask1.data.database.repositories.PrefRepository
+import ru.otus.otushometask1.data.network.dto.PageableResponse
 
 
 class FilmInteractor(private val filmService: FilmService) {
 
     private val favoritesRepository by lazy {
-        FavoritesRepository.getInstance()
+        FilmsRepository.getInstance()
     }
 
-    private val prefRepository by lazy { PrefRepository(App.instance) }
+    private val prefRepository by lazy {
+        PrefRepository(
+            App.instance
+        )
+    }
 
     private var currentPage: Int
         get() = prefRepository.getLastRequestedPage()

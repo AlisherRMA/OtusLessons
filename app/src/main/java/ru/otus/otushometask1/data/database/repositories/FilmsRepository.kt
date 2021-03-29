@@ -1,13 +1,12 @@
-package ru.otus.otushometask1.data.repositories
+package ru.otus.otushometask1.data.database.repositories
 
-import android.widget.Toast
 import ru.otus.otushometask1.App
-import ru.otus.otushometask1.data.dao.FilmDao
-import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.data.database.dao.FilmDao
+import ru.otus.otushometask1.data.database.entity.Film
 
-object FavoritesRepository {
+object FilmsRepository {
 
-    private lateinit var instance: FavoritesRepository
+    private lateinit var instance: FilmsRepository
 
     private val db by lazy {
         App().getInstance().getDatabase()
@@ -15,7 +14,7 @@ object FavoritesRepository {
 
     lateinit var filmDao: FilmDao
 
-    fun getInstance(): FavoritesRepository {
+    fun getInstance(): FilmsRepository {
         instance = this
 
         filmDao = db.filmDao()

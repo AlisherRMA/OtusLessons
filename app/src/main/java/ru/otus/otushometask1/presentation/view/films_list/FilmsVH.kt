@@ -13,7 +13,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.like.LikeButton
 import ru.otus.otushometask1.R
-import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.data.database.entity.Film
 
 class FilmsVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val title: TextView = itemView.findViewById(R.id.title)

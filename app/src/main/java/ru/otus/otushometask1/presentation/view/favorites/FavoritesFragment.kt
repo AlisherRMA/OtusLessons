@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.otus.otushometask1.R
-import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.data.database.entity.Film
 import ru.otus.otushometask1.presentation.viewmodel.FilmsListViewModel
 
 class FavoritesFragment : Fragment() {

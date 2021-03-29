@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.otus.otushometask1.data.FilmService
+import ru.otus.otushometask1.data.network.repositories.FilmService
 import ru.otus.otushometask1.domain.FilmInteractor
 
 class App : Application() {

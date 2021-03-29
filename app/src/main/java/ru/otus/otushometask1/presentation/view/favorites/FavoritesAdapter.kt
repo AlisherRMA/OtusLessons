@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.otus.otushometask1.R
-import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.data.database.entity.Film
 
 class FavoritesAdapter(
     private val items: MutableList<Film>,

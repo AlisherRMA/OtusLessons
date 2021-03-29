@@ -23,7 +23,18 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/poster_4" />
+            tools:srcCompat="@drawable/poster_4"
+            android:contentDescription="@string/film_poster" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/image"
+            />
 
         <com.like.LikeButton
             android:id="@+id/makeFavorite"
@@ -57,7 +68,7 @@
             android:textSize="30sp"
             android:textStyle="bold"
             android:paddingHorizontal="10dp"
-            android:gravity="right"
+            android:gravity="end"
             app:layout_constraintBottom_toBottomOf="@id/image"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="Начало" />

@@ -1,4 +1,4 @@
-package ru.otus.otushometask1.data.entity
+package ru.otus.otushometask1.data.database.entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
@@ -34,9 +34,4 @@ data class FavoriteFilms(
     @ColumnInfo(index = true) val filmId: Int
 )
 
-data class PageableResponse(
-    @SerializedName("page") val page: Int,
-    @SerializedName("results") val results: List<Film>,
-    @SerializedName("total_pages") val totalPages: Int,
-    @SerializedName("total_results") val totalResults: Int
-)
+

@@ -1,4 +1,4 @@
-package ru.otus.otushometask1.data.entity
+package ru.otus.otushometask1.data.network.dto
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

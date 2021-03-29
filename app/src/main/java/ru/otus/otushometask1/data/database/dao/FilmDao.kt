@@ -1,8 +1,7 @@
-package ru.otus.otushometask1.data.dao
+package ru.otus.otushometask1.data.database.dao
 
 import androidx.room.*
-import ru.otus.otushometask1.data.entity.FavoriteFilms
-import ru.otus.otushometask1.data.entity.Film
+import ru.otus.otushometask1.data.database.entity.Film
 
 @Dao
 interface FilmDao {
@@ -36,6 +35,6 @@ interface FilmDao {
     @Query("SELECT count(*) FROM films")
     fun getFilmsCount(): Int
 
-    @Query("SELECT count(*) FROM favorite_films")
-    fun getFavoritesCount(): Int
+//    @Query("SELECT count(*) FROM favorite_films")
+//    fun getFavoritesCount(): Int
 }
