@@ -1,39 +1,30 @@
-package ru.otus.otushometask1
+package ru.otus.otushometask1.presentation.view
 
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import ru.otus.otushometask1.data_classes.DetailsData
-import ru.otus.otushometask1.data_classes.FilmData
-import ru.otus.otushometask1.dialogs.CustomDialog
-import ru.otus.otushometask1.favorites.FavoritesFragment
-import ru.otus.otushometask1.favorites.FavoritesFragment.FavoritesClickListener
-import ru.otus.otushometask1.film_details.FilmDetailsFragment
-import ru.otus.otushometask1.films_list.FilmsAdapter
-import ru.otus.otushometask1.films_list.FilmsFragment
+import ru.otus.otushometask1.R
+import ru.otus.otushometask1.data.database.entity.Film
+import ru.otus.otushometask1.data.network.dto.DetailsData
+import ru.otus.otushometask1.presentation.view.dialogs.CustomDialog
+import ru.otus.otushometask1.presentation.view.favorites.FavoritesFragment
+import ru.otus.otushometask1.presentation.view.film_details.FilmDetailsFragment
+import ru.otus.otushometask1.presentation.view.films_list.FilmsAdapter
+import ru.otus.otushometask1.presentation.view.films_list.FilmsFragment
 
 class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
-    FilmDetailsFragment.DetailsClickListener, FavoritesClickListener {
-    private var favoriteItems = mutableListOf<FilmData>()
+    FilmDetailsFragment.DetailsClickListener {
     private val noHeaderFragmentTags = arrayOf(FilmDetailsFragment.TAG)
-
-    companion object {
-        const val EXTRA_FILMS = "EXTRA_FILMS"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("onCreate", "OnMainActivityCreated")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        // check if there's savedInstanceState
-        savedInstanceState?.getParcelableArrayList<FilmData>(EXTRA_FILMS)?.let {favoriteItems = it}
 
         openFilmsList()
         initClickListeners()
@@ -42,25 +33,24 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
 
     override fun onAttachFragment(fragment: Fragment) {
         // hide the default toolbar if the fragment has its own toolbar
-        if(noHeaderFragmentTags.contains(fragment.tag.toString())) supportActionBar?.hide()
+        if (noHeaderFragmentTags.contains(fragment.tag.toString())) supportActionBar?.hide()
         else supportActionBar?.show()
 
         super.onAttachFragment(fragment)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(EXTRA_FILMS, ArrayList(favoriteItems))
-        super.onSaveInstanceState(outState)
-    }
-
     private fun openFilmsList() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, FilmsFragment.newInstance(ArrayList(favoriteItems)), FilmsFragment.TAG)
+            .replace(
+                R.id.fragmentContainer,
+                FilmsFragment.newInstance(),
+                FilmsFragment.TAG
+            )
             .commit()
     }
 
-    private fun openFilmDetails(filmData: FilmData) {
+    private fun openFilmDetails(filmData: Film) {
         supportFragmentManager
             .beginTransaction()
             .replace(
@@ -77,7 +67,7 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
             .beginTransaction()
             .replace(
                 R.id.fragmentContainer,
-                FavoritesFragment.newInstance(ArrayList(favoriteItems)),
+                FavoritesFragment.newInstance(),
                 FavoritesFragment.TAG
             )
             .addToBackStack(null)
@@ -113,7 +103,8 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else {
-            val dialog: Dialog = CustomDialog(this)
+            val dialog: Dialog =
+                CustomDialog(this)
             dialog.setCancelable(false)
             dialog.setOnDismissListener {
                 super.onBackPressed()
@@ -123,16 +114,9 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     }
 
     // FilmsListFragment's click listeners
-    override fun onDetailsClick(filmItem: FilmData, position: Int) = openFilmDetails(filmItem)
-    override fun onFavoriteClick(filmItem: FilmData) {
-        favoriteItems.add(filmItem)
-        Toast.makeText(this, "${filmItem.name} added to favorites list", Toast.LENGTH_SHORT).show()
-    }
-    override fun onDeleteClick(filmItem: FilmData) {
-        val index = favoriteItems.indexOf(favoriteItems.find { it.id == filmItem.id })
-        favoriteItems.removeAt(index)
-        Toast.makeText(this, "${filmItem.name} removed from favorites list", Toast.LENGTH_SHORT).show()
-    }
+    override fun onDetailsClick(filmItem: Film, position: Int) = openFilmDetails(filmItem)
+    override fun onFavoriteClick(filmItem: Film) {}
+    override fun onDeleteClick(filmItem: Film) {}
 
     // FilmDetailsFragment's click listeners
     override fun onDetailsFragmentFinished(filmItem: DetailsData) {
@@ -140,13 +124,6 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         Log.d("comment", filmItem.comment)
     }
 
-    // FavoritesFragment's click listeners
-    override fun onFavoritesDeleteClick(position: Int) {
-//        Toast.makeText(this, "${favoriteItems[position].name} removed from favorites list", Toast.LENGTH_SHORT).show()
-        favoriteItems.removeAt(position)
-    }
-    override fun onDeleteCanceled(item: FilmData) {
-       favoriteItems.add(item)
-    }
+
 
 }
