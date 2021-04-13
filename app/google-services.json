@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "152950564867",
+    "project_id": "otus-films",
+    "storage_bucket": "otus-films.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152950564867:android:b8f28290d83dab844c4636",
+        "android_client_info": {
+          "package_name": "ru.otus.otushometask1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152950564867-slrhunqk99ml7c05qa95rc66i644sh11.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg0XHjZzeSvSxAnVxhfmI8V5aYbpMqaTE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152950564867-slrhunqk99ml7c05qa95rc66i644sh11.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

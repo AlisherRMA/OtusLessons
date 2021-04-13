@@ -72,6 +72,10 @@ class FilmInteractor(private val filmService: FilmService) {
         return favoritesRepository.getFilmsCount()
     }
 
+    fun getFilmById(id: Int): Film? {
+        return favoritesRepository.selectById(id)
+    }
+
     interface GetRepoCallback {
         fun onSuccess(repos: List<Film>)
         fun onError(error: String)
