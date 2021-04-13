@@ -1,17 +1,12 @@
 package ru.otus.otushometask1.presentation.viewmodel
 
-import android.R
-import android.R.id.message
-import android.app.*
-import android.content.BroadcastReceiver
+import android.app.AlarmManager
+import android.app.Application
+import android.app.PendingIntent
 import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
-import android.os.Build
-import android.os.SystemClock
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
+import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,12 +14,10 @@ import ru.otus.otushometask1.App
 import ru.otus.otushometask1.data.database.entity.Film
 import ru.otus.otushometask1.domain.FilmInteractor
 import ru.otus.otushometask1.domain.NotificationPublisher
-import ru.otus.otushometask1.presentation.view.MainActivity
+import java.util.*
 
 
 class FilmsListViewModel(application: Application) : AndroidViewModel(application) {
-    val NOTIFICATION_CHANNEL_ID = "10001"
-    private val default_notification_channel_id = "default"
     private val filmsLiveData = MutableLiveData<List<Film>>()
     private val errorLiveData = MutableLiveData<String>()
 
@@ -60,53 +53,35 @@ class FilmsListViewModel(application: Application) : AndroidViewModel(applicatio
         favoriteFilmsLiveData.postValue(films)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun makeFavorite(film: Film, isLiked: Boolean) {
-//        filmsInteractor.makeFavorite(film, isLiked)
-//        getFavoriteFilms()
-
-        getNotification(film.title)?.let {
-            scheduleNotification(it, 10000)
-        }
-
-//        getNotification(film.title)
+        filmsInteractor.makeFavorite(film, isLiked)
+        getFavoriteFilms()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun scheduleNotification(notification: Notification, delay: Int) {
+    fun watchLater(film: Film, notifyTime: Calendar){
+        scheduleNotification(film, notifyTime)
+    }
+
+    private fun scheduleNotification(film: Film, notifyTime: Calendar) {
         val notificationIntent = Intent(App.instance, NotificationPublisher::class.java)
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1)
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification)
-        notificationIntent.putExtra("KEY", "YOUR VAL")
+        val bundle = Bundle()
+        bundle.putParcelable("film", film)
+        notificationIntent.putExtra("filmBundle", bundle)
         val pendingIntent = PendingIntent.getBroadcast(
             App.instance,
             0,
             notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val futureInMillis = SystemClock.elapsedRealtime() + delay
+        val futureInMillis = notifyTime.timeInMillis
+        Log.d("TIME", futureInMillis.toString())
         val alarmManager =
             App.instance.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager[AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis] = pendingIntent
+        alarmManager[AlarmManager.RTC_WAKEUP, futureInMillis] = pendingIntent
     }
 
-    private fun getNotification(content: String): Notification {
-        val builder =
-            NotificationCompat.Builder(App.instance, default_notification_channel_id )
-        builder.setContentTitle("Вы хотели посмотреть $content")
-        builder.setContentText(content)
-        builder.setSmallIcon(R.drawable.alert_light_frame)
-        builder.setAutoCancel(true)
-        builder.setChannelId(NOTIFICATION_CHANNEL_ID)
-//        builder.setContentIntent(
-//            PendingIntent.getBroadcast(
-//                App.instance,
-//                0,
-//                notificationIntent,
-//                PendingIntent.FLAG_UPDATE_CURRENT
-//            ))
-        return builder.build()
+    fun getFilmById(id: Int): Film? {
+        return filmsInteractor.getFilmById(id)
     }
 
 }

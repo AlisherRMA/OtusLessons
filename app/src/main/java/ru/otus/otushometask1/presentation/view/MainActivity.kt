@@ -1,11 +1,13 @@
 package ru.otus.otushometask1.presentation.view
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.otus.otushometask1.R
@@ -16,10 +18,17 @@ import ru.otus.otushometask1.presentation.view.favorites.FavoritesFragment
 import ru.otus.otushometask1.presentation.view.film_details.FilmDetailsFragment
 import ru.otus.otushometask1.presentation.view.films_list.FilmsAdapter
 import ru.otus.otushometask1.presentation.view.films_list.FilmsFragment
+import ru.otus.otushometask1.presentation.viewmodel.FilmsListViewModel
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
     FilmDetailsFragment.DetailsClickListener {
     private val noHeaderFragmentTags = arrayOf(FilmDetailsFragment.TAG)
+
+    private val viewModel: FilmsListViewModel by lazy {
+        ViewModelProvider(this).get(FilmsListViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("onCreate", "OnMainActivityCreated")
@@ -29,9 +38,13 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         openFilmsList()
         initClickListeners()
         initBottomNavigation()
+
+        checkIfActivityStartedFromNotification()
     }
 
+
     override fun onAttachFragment(fragment: Fragment) {
+        Log.d("FragmentAttached", "FragmentAttached")
         // hide the default toolbar if the fragment has its own toolbar
         if (noHeaderFragmentTags.contains(fragment.tag.toString())) supportActionBar?.hide()
         else supportActionBar?.show()
@@ -113,6 +126,26 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         }
     }
 
+    @SuppressLint("LongLogTag")
+    private fun checkIfActivityStartedFromNotification() {
+        val firebaseFilmId = intent.extras?.get("film_id")
+        if (firebaseFilmId != null) {
+            val film = viewModel.getFilmById(firebaseFilmId.toString().toInt())
+            if (film != null) {
+                Timer().schedule(timerTask {
+                    openFilmDetails(film)
+                }, 500)
+            }
+        }
+        val bundle = intent.getBundleExtra("filmBundle")
+        if (bundle != null) {
+            val film = bundle.getParcelable<Film>("film") as Film
+            Timer().schedule(timerTask {
+                openFilmDetails(film)
+            }, 500)
+        }
+    }
+
     // FilmsListFragment's click listeners
     override fun onDetailsClick(filmItem: Film, position: Int) = openFilmDetails(filmItem)
     override fun onFavoriteClick(filmItem: Film) {}
@@ -123,7 +156,6 @@ class MainActivity : AppCompatActivity(), FilmsAdapter.NewsClickListener,
         Log.d("checkbox", "${filmItem.isCheckBoxSelected}")
         Log.d("comment", filmItem.comment)
     }
-
 
 
 }

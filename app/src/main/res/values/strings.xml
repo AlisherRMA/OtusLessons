@@ -10,4 +10,5 @@
     <string name="button_details">details</string>
     <string name="last_update_time" translatable="false" />
     <string name="film_poster">film_poster</string>
+    <string name="watchLater">Посмотреть позже</string>
 </resources>
